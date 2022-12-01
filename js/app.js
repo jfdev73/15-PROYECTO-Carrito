@@ -12,6 +12,7 @@ carritoImg.addEventListener("click", () => {
 });
 
 loadEventListeners();
+
 function loadEventListeners() {
   listaCursos.addEventListener("click", (e) => {
     e.preventDefault();
@@ -21,6 +22,42 @@ function loadEventListeners() {
       getDataCuorse(cursoSeleccionado);
     }
   });
+
+  //eliminar curso de carrito
+  carrito.addEventListener("click", eliminarCurso)
+
+  vaciarCarrito.addEventListener("click", () => {
+    //console.time('performance');
+    articulosCarrito = [];
+    // articulosCarrito.splice(0, articulosCarrito.length);
+    //console.timeEnd('performance');
+    carritoHTML();
+
+  })
+}
+
+function eliminarCurso(e) {
+  if (e.target.classList.contains('borrar-curso')) {
+    const cursoId = e.target.getAttribute('data-id');
+
+    articulosCarrito = articulosCarrito.filter(curso => {
+      if (curso.id !== cursoId) {
+        return curso
+      }
+      if (curso.cantidad > 1) {
+        curso.cantidad--;
+        return curso;
+      }
+
+    });
+
+    carritoHTML();
+    /********  Opcion2  ********/
+    // let indice = articulosCarrito.findIndex(curso => curso.id === cursoId);
+    // articulosCarrito.splice(indice, 1);
+
+  }
+
 }
 
 function getDataCuorse(cuorse) {
@@ -68,10 +105,12 @@ function cleanHTML() {
 }
 
 function updateCantidad(infoCourse) {
-  let indice = articulosCarrito.map(producto => producto.id).indexOf(infoCourse.id);
+  let indice = articulosCarrito.findIndex(curso => curso.id === infoCourse.id);
   indice < 0 ? articulosCarrito.push(infoCourse) : articulosCarrito[indice].cantidad++;
-
-  /********  opcion 2  ********/
+  /********  opcion2  ********/
+  // let indice = articulosCarrito.map(producto => producto.id).indexOf(infoCourse.id);
+  // indice < 0 ? articulosCarrito.push(infoCourse) : articulosCarrito[indice].cantidad++;
+  // /********  opcion 3  ********/
   // const c = articulosCarrito.find(curso => curso.id === infoCourse.id);
   // c === undefined ? articulosCarrito.push(infoCourse) : c.cantidad++;
   // indice > -1 ? articulosCarrito[indice].cantidad++ : articulosCarrito.push(infoCourse);
